@@ -9,7 +9,7 @@ which use history API work.
 
 ## Usage
 
-```shell
+```console
 $ spa -h
 Usage of spa:
   -addr string
@@ -19,6 +19,15 @@ Usage of spa:
 ```
 
 ## Installation
+
+### Homebrew (macOS)
+
+```shell
+brew tap irth/irth
+brew install irth/irth/spa
+```
+
+### Manual (others)
 
 Download binary from [releases](https://github.com/irth/spa/releases), `chmod +x`, put it in path.
 
