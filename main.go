@@ -70,9 +70,13 @@ func handler(dir string) http.Handler {
 func main() {
 	var addr string
 	var dir string
+	var tlsCertPath string
+	var tlsKeyPath string
 
 	flag.StringVar(&addr, "addr", ":8000", "address to listen on")
 	flag.StringVar(&dir, "dir", ".", "dir to serve")
+	flag.StringVar(&tlsCertPath, "cert", "", "TLS certificate path (optional)")
+	flag.StringVar(&tlsKeyPath, "key", "", "TLS key path (optional)")
 	flag.Parse()
 
 	p, err := filepath.Abs(dir)
@@ -80,7 +84,13 @@ func main() {
 		log.Fatalf("getting abs path to \"%s\" failed: %s", dir, err)
 	}
 	log.Printf("Serving %s on %s...", p, addr)
-	if err := http.ListenAndServe(addr, handler(p)); err != nil {
-		log.Fatal(err)
+	if tlsCertPath == "" {
+		if err := http.ListenAndServe(addr, handler(p)); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if err := http.ListenAndServeTLS(addr, tlsCertPath, tlsKeyPath, handler(p)); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
